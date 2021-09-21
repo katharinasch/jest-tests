@@ -1,6 +1,6 @@
 const fetch = require('cross-fetch');
 
-const getUserFollowers = (username) => {
+const = (username) => {
   fetch(`https://api.github.com/users/${username}/followers`)
   .then((response) => {
     if(response.ok){
@@ -13,5 +13,5 @@ const getUserFollowers = (username) => {
     console.error('Error fetching data: ', error)
   })
 };
-
+//getUserFollowers('katharinasch')
 module.exports.getUserFollowers = getUserFollowers;
