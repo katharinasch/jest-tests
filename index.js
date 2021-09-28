@@ -1,17 +1,18 @@
 const fetch = require('cross-fetch');
 
-const = (username) => {
-  fetch(`https://api.github.com/users/${username}/followers`)
+const getUserFollowers = (username) => {
+  return fetch(`https://api.github.com/users/${username}/followers`)
   .then((response) => {
     if(response.ok){
       return response.json()
-      //.then(data => console.log(data));
+      //.then(data => console.log(data.length));
     }
       throw new Error('Api is not available') 
     })
-  .catch((error) => {
+  .catch(error => {
     console.error('Error fetching data: ', error)
   })
 };
-//getUserFollowers('katharinasch')
+//getUserFollowers('octocat')
+
 module.exports.getUserFollowers = getUserFollowers;

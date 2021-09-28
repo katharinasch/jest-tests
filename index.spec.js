@@ -1,20 +1,46 @@
+var nock = require('nock');
 var getUserFollowers = require('./index').getUserFollowers;
 
-describe('GET followers', () => {
-  it('returns user followers', (done) => {
-    // Increase the default timeout for this test
-    // If the test takes longer than this, it will fail
-    // jest.setTimeout(3000)
+// This test actually calls the api and waits for response
+
+test('Get followers', () => {
+  return getUserFollowers('katharinasch').then((data) => {
+    //console.log('DATA RETURNED: ', data);
+    expect(data).toBeDefined();
+  })
+})
+
+// This test doesn't call the api
+
+describe('GET followers MOCK', () => {
+  beforeEach(() => {
+    var followersResponse = [{
+      "login": "octocat",
+      "id": 583231,
+      "followers_url": "https://api.github.com/users/octocat/followers",
+    },
+    {
+      "login": "nanocat",
+      "id": 583233,
+      "followers_url": "https://api.github.com/users/nanocat/followers",
+    }]
+    nock('https://api.github.com')
+      .get('/users/octocat/followers')
+      // returns the content in the followersResponse variable as the response body.
+      .reply(200, followersResponse);
+  })
+      
+  test('returns mocked user followers', () => {
+  // Increase the default timeout for this test
+  // If the test takes longer than this, it will fail
+  // jest.setTimeout(3000)
     
-  var username = 'octocat';
+    var username = 'octocat';
 
-  getUserFollowers(username, (followers) => {
-    // It should return an array object
-    expect(Array.isArray(followers)).to.equal(true);
-    // Ensure that at least one follower is in the array
-    expect(followers).to.have.length.above(1);
-    });
-    done();
+    return getUserFollowers(username).then((data) => {
+      expect(data).toBeDefined()
+      expect(data).toMatchObject(data)
+      //expect(data).toBeFalsy()
+    })
   });
-});
-
+}); 
